@@ -7,9 +7,9 @@ import com.mrflaitx.taskapp35.data.AppDataBase
 class App: Application() {
     override fun onCreate() {
         super.onCreate()
-        appDataBase = Room.databaseBuilder(this,AppDataBase::class.java,"dataBase")
-            .allowMainThreadQueries()
+        appDataBase = Room.databaseBuilder(applicationContext,AppDataBase::class.java,"dataBase")
             .fallbackToDestructiveMigration()
+            .allowMainThreadQueries()
             .build()
     }
 
