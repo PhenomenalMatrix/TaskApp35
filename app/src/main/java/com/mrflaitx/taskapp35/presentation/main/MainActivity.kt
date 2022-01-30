@@ -2,7 +2,6 @@ package com.mrflaitx.taskapp35.presentation.main
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -21,14 +20,14 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        initListeners()
         setupRecyclerView()
         initObserves()
+        initListeners()
     }
 
     private fun initObserves() {
         viewModel.shopList.observe(this, { listData ->
-            adapterShop.list = listData
+            adapterShop.submitList(listData)
         })
     }
 
@@ -54,8 +53,8 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-               val item =  adapterShop.list[viewHolder.absoluteAdapterPosition]
-                    ///
+                val item =  adapterShop.currentList[viewHolder.absoluteAdapterPosition]
+                viewModel.deleteShopItem(item)
             }
         }
         val itemTouchHelper = ItemTouchHelper(callback)
@@ -63,7 +62,9 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     }
 
     private fun initListeners() {
-
+        adapterShop.onShopItemLongClickListener = {
+            Toast.makeText(applicationContext, it.toString(), Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun addShopItemfun() {
